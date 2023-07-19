@@ -12,11 +12,13 @@ export default function Home() {
     const [array, setArray] = useState<APi[]>([]);
     const [title, setTitle] = useState('');
     const [image, setImage] = useState('');
-    const [fetchData, setFetchData] = useState(true);
+    
 
+    const [fetchData, setFetchData] = useState(true);
+    const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    fetch('https://json-sever-navy.vercel.app/comments')
+    fetch('http://localhost:4000/comments')
     .then(response => response.json())
     .then((json) => {
         console.log(json);
@@ -26,7 +28,7 @@ export default function Home() {
   }, [fetchData])
 
   const enviarInformacao = () => {
-    fetch('https://json-sever-navy.vercel.app/comments', {
+    fetch('http://localhost:4000/comments', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -50,7 +52,7 @@ export default function Home() {
 
   const excluirInformacao = (val : APi) => {
         if(val.id === val.id){
-          fetch(`https://json-sever-navy.vercel.app/comments/${val.id}`, {
+          fetch(`http://localhost:4000/comments/${val.id}`, {
             method: 'DELETE',
       
           })
@@ -62,8 +64,31 @@ export default function Home() {
         }
   }
 
-  const editarInformacao = (/* val : APi */) => {
-    alert('Funcionou o botão editar');
+  const editarInformacao = (val : APi ) => {
+        if (val.id === val.id) {
+          fetch(`http://localhost:4000/comments/${val.id}`, {
+            method: 'Put',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+          },
+            body: JSON.stringify({
+              id:Date.now(),
+              title: title,
+              image: image
+            }),
+          })
+          .then(response => response.json())
+          .then((json) => {
+            console.log(json);
+      
+          })
+              setTitle('');
+              setImage('');
+              setModal(false);
+              setFetchData(true); 
+
+        }
   }
 
   return (
@@ -75,12 +100,16 @@ export default function Home() {
       onChange={(e) => setTitle(e.target.value)}
       placeholder='Escreva um título'
       className="text-black"
+      value={title}
+
        />
 
       <input type="text"
       onChange={(e) => setImage(e.target.value)}
       placeholder='Escreva a url de uma imagem'
       className="text-black"
+      value={image}
+
        />
 
       <button
@@ -93,6 +122,8 @@ export default function Home() {
       <div
       className="flex flex-row flex-wrap"
       >
+
+        
       {
         array.map((val) => {
           return(
@@ -114,10 +145,52 @@ export default function Home() {
                 </button>
 
                 <button
-                onClick={editarInformacao}
+                onClick={() => setModal(true)}
                 >
                   Editar
                 </button>
+
+                {
+          modal &&
+
+          <div
+          >
+            <input type="text"
+            defaultValue={val.title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder='Escreva um título'
+            className="text-black"
+             />
+
+            <br />
+
+            <input type="text"
+            defaultValue={val.image}
+            onChange={(e) => setImage(e.target.value)}
+            placeholder='Escreva a url de uma imagem'       
+            className="text-black"
+                     
+             />
+
+            <br />
+
+            <button
+            onClick={() => editarInformacao(val)}
+            >
+              Salvar informação editada
+
+            </button>
+
+            <br />
+
+
+            <button
+            onClick={() => setModal(false)}
+
+            >Fechar modal
+            </button>
+          </div>
+        }
             </div>
           )
         })
