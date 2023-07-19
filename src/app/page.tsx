@@ -6,31 +6,34 @@ type APi = {
   title: string;
   image: string;
   id: string;
+  val: number;
 }
 export default function Home() {
     const [array, setArray] = useState<APi[]>([]);
     const [title, setTitle] = useState('');
     const [image, setImage] = useState('');
+    const [fetchData, setFetchData] = useState(true);
 
 
   useEffect(() => {
-    fetch('https://apifake.vercel.app/comments')
+    fetch('https://json-sever-navy.vercel.app/comments')
     .then(response => response.json())
     .then((json) => {
         console.log(json);
         setArray(json);
+        setFetchData(false); 
     })
-  }, [])
+  }, [fetchData])
 
   const enviarInformacao = () => {
-    fetch('https://apifake.vercel.app/comments', {
+    fetch('https://json-sever-navy.vercel.app/comments', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
     },
       body: JSON.stringify({
-        id:7,
+        id:Date.now(),
         title: title,
         image: image
       }),
@@ -38,8 +41,29 @@ export default function Home() {
     .then(response => response.json())
     .then((json) => {
       console.log(json);
+      setFetchData(true); 
 
     })
+        setTitle('');
+        setImage('');
+  }
+
+  const excluirInformacao = (val : APi) => {
+        if(val.id === val.id){
+          fetch(`https://json-sever-navy.vercel.app/comments/${val.id}`, {
+            method: 'DELETE',
+      
+          })
+          .then(response => response.json())
+          .then((json) => {
+            console.log(json);
+            setFetchData(true); 
+          })
+        }
+  }
+
+  const editarInformacao = (/* val : APi */) => {
+    alert('Funcionou o botão editar');
   }
 
   return (
@@ -81,6 +105,19 @@ export default function Home() {
                alt={val.title}
                className='w-96'
                 />
+
+                <button
+                className="mr-9"
+                onClick={() => excluirInformacao(val)}
+                >
+                  Excluir
+                </button>
+
+                <button
+                onClick={editarInformacao}
+                >
+                  Editar
+                </button>
             </div>
           )
         })
