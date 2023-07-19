@@ -14,7 +14,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    fetch('https://apifake.vercel.app/')
+    fetch('https://apifake.vercel.app/comments')
     .then(response => response.json())
     .then((json) => {
         console.log(json);
@@ -23,7 +23,7 @@ export default function Home() {
   }, [])
 
   const enviarInformacao = () => {
-    fetch('https://apifake.vercel.app/', {
+    fetch('https://apifake.vercel.app/comments', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
