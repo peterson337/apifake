@@ -32,6 +32,7 @@ export default function Home() {
     fetch('https://json-sever-navy.vercel.app/comments', {
       method: 'POST',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json'
     },
       body: JSON.stringify({
