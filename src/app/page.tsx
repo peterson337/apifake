@@ -18,7 +18,8 @@ export default function Home() {
     const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:4000/comments')
+    fetch('https://json-sever-navy.vercel.app/comments')
+//!      http://localhost:4000/comments
     .then(response => response.json())
     .then((json) => {
         console.log(json);
@@ -28,7 +29,7 @@ export default function Home() {
   }, [fetchData])
 
   const enviarInformacao = () => {
-    fetch('http://localhost:4000/comments', {
+    fetch('https://json-sever-navy.vercel.app/comments', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -52,7 +53,9 @@ export default function Home() {
 
   const excluirInformacao = (val : APi) => {
         if(val.id === val.id){
-          fetch(`http://localhost:4000/comments/${val.id}`, {
+          fetch(`https://json-sever-navy.vercel.app/comments/${val.id}`
+//?     http://localhost:4000/comments/${val.id}
+          , {
             method: 'DELETE',
       
           })
@@ -66,7 +69,7 @@ export default function Home() {
 
   const editarInformacao = (val : APi ) => {
         if (val.id === val.id) {
-          fetch(`http://localhost:4000/comments/${val.id}`, {
+          fetch(`https://json-sever-navy.vercel.app/comments/${val.id}`, {
             method: 'Put',
             headers: {
               Accept: 'application/json',
